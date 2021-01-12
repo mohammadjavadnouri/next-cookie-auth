@@ -7,9 +7,10 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "dev":"nodemon server.js"
+    "dev": "nodemon server.js"
   },
   "dependencies": {
+    "axios": "^0.21.1",
     "express": "^4.17.1",
     "next": "^10.0.5",
     "react": "^17.0.1",
