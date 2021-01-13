@@ -5,8 +5,8 @@ class LoginForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: "",
-      password: "",
+      email: "Rey.Padberg@karina.biz",
+      password: "ambrose.net",
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -23,6 +23,7 @@ class LoginForm extends React.Component {
   }
 
   render() {
+    const { email, password } = this.state;
     return (
       <form onSubmit={this.handleSubmit}>
         <div>
@@ -30,6 +31,7 @@ class LoginForm extends React.Component {
             type="email"
             name="email"
             placeholder="email"
+            value={email}
             onChange={this.handleChange}
           ></input>
         </div>
@@ -38,6 +40,7 @@ class LoginForm extends React.Component {
             type="password"
             name="password"
             placeholder="password"
+            value={password}
             onChange={this.handleChange}
           ></input>
         </div>
