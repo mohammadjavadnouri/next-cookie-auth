@@ -8,6 +8,8 @@ class LoginForm extends React.Component {
     this.state = {
       email: "Rey.Padberg@karina.biz",
       password: "ambrose.net",
+      error: "",
+      isLoading: false,
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -20,13 +22,22 @@ class LoginForm extends React.Component {
   handleSubmit(evt) {
     const { email, password } = this.state;
     evt.preventDefault();
-    loginUser(email, password).then(() => {
-      Router.push("/profile");
-    });
+    this.setState({ error: "", isLoading: true });
+    loginUser(email, password)
+      .then(() => {
+        Router.push("/profile");
+      })
+      .catch(this.showError);
   }
 
+  showError = (err) => {
+    console.log(err);
+    const error = (err.response && err.response.data) || err.message;
+    this.setState({ error, isLoading: false });
+  };
+
   render() {
-    const { email, password } = this.state;
+    const { email, password, error, isLoading } = this.state;
     return (
       <form onSubmit={this.handleSubmit}>
         <div>
@@ -47,7 +58,10 @@ class LoginForm extends React.Component {
             onChange={this.handleChange}
           ></input>
         </div>
-        <button type="submit">Submit</button>
+        <button disabled={isLoading} type="submit">
+          {isLoading ? "Sending" : "Submit"}
+        </button>
+        {error && <div>{error}</div>}
       </form>
     );
   }
