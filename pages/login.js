@@ -1,12 +1,14 @@
+import React from "react";
 import Layout from "../components/Layout";
 import LoginForm from "../components/LoginForm";
+import { authInitialProps } from "../lib/auth";
 
-function Login() {
+export default function Login(props) {
   return (
-    <Layout title="Login">
+    <Layout title="Login" {...props}>
       <LoginForm />
     </Layout>
   );
 }
 
-export default Login;
+Login.getInitialProps = authInitialProps();

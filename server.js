@@ -1,6 +1,6 @@
-const { default: axios } = require("axios");
-const express = require("express");
 const next = require("next");
+const express = require("express");
+const axios = require("axios");
 const cookieParser = require("cookie-parser");
 
 const dev = process.env.NODE_ENV !== "production";
@@ -9,12 +9,13 @@ const app = next({ dev });
 const handle = app.getRequestHandler();
 
 const AUTH_USER_TYPE = "authenticated";
-const KOOKIE_SECRET = "abcdefghijklmnopqrstuvwxyz";
-const KOOKIE_OPTIONS = {
+const COOKIE_SECRET = "asldkfjals23ljk";
+const COOKIE_OPTIONS = {
   httpOnly: true,
   secure: !dev,
   signed: true,
 };
+
 const authenticate = async (email, password) => {
   const { data } = await axios.get(
     "https://jsonplaceholder.typicode.com/users"
@@ -30,7 +31,7 @@ app.prepare().then(() => {
   const server = express();
 
   server.use(express.json());
-  server.use(cookieParser(KOOKIE_SECRET));
+  server.use(cookieParser(COOKIE_SECRET));
 
   server.post("/api/login", async (req, res) => {
     const { email, password } = req.body;
@@ -43,8 +44,13 @@ app.prepare().then(() => {
       email: user.email,
       type: AUTH_USER_TYPE,
     };
-    res.cookie("token", userData, KOOKIE_OPTIONS);
+    res.cookie("token", userData, COOKIE_OPTIONS);
     res.json(userData);
+  });
+
+  server.post("/api/logout", (req, res) => {
+    res.clearCookie("token", COOKIE_OPTIONS);
+    res.sendStatus(204);
   });
 
   server.get("/api/profile", async (req, res) => {
@@ -66,6 +72,6 @@ app.prepare().then(() => {
 
   server.listen(port, (err) => {
     if (err) throw err;
-    console.log(`Listening of PORT ${port}`);
+    console.log(`Listening on PORT ${port}`);
   });
 });

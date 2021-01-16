@@ -3,41 +3,38 @@ import { loginUser } from "../lib/auth";
 import Router from "next/router";
 
 class LoginForm extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      email: "Rey.Padberg@karina.biz",
-      password: "ambrose.net",
-      error: "",
-      isLoading: false,
-    };
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
+  state = {
+    email: "Rey.Padberg@karina.biz",
+    password: "ambrose.net",
+    error: "",
+    isLoading: false,
+  };
 
-  handleChange(evt) {
-    this.setState({ [evt.target.name]: evt.target.value });
-  }
+  handleChange = (event) => {
+    this.setState({ [event.target.name]: event.target.value });
+  };
 
-  handleSubmit(evt) {
+  handleSubmit = (event) => {
     const { email, password } = this.state;
-    evt.preventDefault();
+
+    event.preventDefault();
     this.setState({ error: "", isLoading: true });
     loginUser(email, password)
       .then(() => {
         Router.push("/profile");
       })
       .catch(this.showError);
-  }
+  };
 
   showError = (err) => {
-    console.log(err);
+    console.error(err);
     const error = (err.response && err.response.data) || err.message;
     this.setState({ error, isLoading: false });
   };
 
   render() {
     const { email, password, error, isLoading } = this.state;
+
     return (
       <form onSubmit={this.handleSubmit}>
         <div>
@@ -47,7 +44,7 @@ class LoginForm extends React.Component {
             placeholder="email"
             value={email}
             onChange={this.handleChange}
-          ></input>
+          />
         </div>
         <div>
           <input
@@ -56,7 +53,7 @@ class LoginForm extends React.Component {
             placeholder="password"
             value={password}
             onChange={this.handleChange}
-          ></input>
+          />
         </div>
         <button disabled={isLoading} type="submit">
           {isLoading ? "Sending" : "Submit"}
